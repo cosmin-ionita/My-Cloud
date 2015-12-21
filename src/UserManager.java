@@ -7,12 +7,12 @@ public class UserManager {
 
     private static UserManager currentUser = new UserManager ();
 
-    private static String userName;
-    private static String name;
-    private static String surname;
+    private  String userName;
+    private  String name;
+    private  String surname;
 
-    private static Date creationTime;
-    private static Date lastLoginTime;
+    private  Date creationTime;
+    private  Date lastLoginTime;
 
     private UserManager() {
 
@@ -28,19 +28,20 @@ public class UserManager {
 
                                   Date userCreationTime,
                                   Date userLastLoginTime) {
-        name = newName;
-        surname = userSurname;
-        userName = newUserName;
+        currentUser.name = newName;
+        currentUser.surname = userSurname;
+        currentUser.userName = newUserName;
 
-        creationTime = userCreationTime;
-        lastLoginTime = userLastLoginTime;
+        currentUser.creationTime = userCreationTime;
+        currentUser.lastLoginTime = userLastLoginTime;
     }
 
     public String getUserInfo() {
-        return userName + "\n" +
-                name + "\n" +
-                surname + "\n" +
-                creationTime.toString() + "\n" +
-                lastLoginTime.toString() + "\n";
+
+        return currentUser.userName + "\n" +
+                currentUser.name + "\n" +
+                currentUser.surname + "\n" +
+                currentUser.creationTime.toString() + "\n" +
+                currentUser.lastLoginTime.toString() + "\n";
     }
 }
