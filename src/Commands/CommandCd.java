@@ -1,5 +1,7 @@
 package Commands;
 
+import FileSystem.Directory;
+import FileSystem.File;
 import Interfaces.Command;
 import Interfaces.Repository;
 
@@ -9,6 +11,19 @@ import Interfaces.Repository;
 public class CommandCd implements Command {
 
     public void execute(Repository repository) {
-            repository.accept(this);
+        repository.accept(this);
     }
+
+    public void execute() {
+
+    }
+
+    public void execute(Directory directory) {
+
+    }
+
+    public void execute(File file) {
+        System.out.println("You cannot change current directory to a file!");
+    }
+
 }
