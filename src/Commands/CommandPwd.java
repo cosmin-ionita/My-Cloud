@@ -6,7 +6,7 @@ import Interfaces.Repository;
 /**
  * Created by Ionita Cosmin on 12/21/2015.
  */
-public class CommandPwd implements Command {
+public class CommandPwd {//implements Command {
 
     public void execute(Repository repository) {
 
