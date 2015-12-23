@@ -5,8 +5,15 @@ package FileSystem;
  */
 public class Permissions {
 
-    public static boolean read;
-    public static boolean write;
+    public boolean read;
+    public boolean write;
 
-    public static String userName;
+    public String userName;
+
+    public Permissions(boolean read, boolean write, String userName) {
+        this.read = read;
+        this.write = write;
+
+        this.userName = userName;
+    }
 }
