@@ -2,39 +2,76 @@ package FileSystem;
 
 import Interfaces.Command;
 import Interfaces.Repository;
+import SystemState.UserManager;
 
 import java.util.ArrayList;
 /**
  * Created by Ionita Cosmin on 12/21/2015.
  */
-public class Directory extends AbstractFileSystem {
+public class Directory extends AbstractFileSystemNode {
 
     private ArrayList<Repository> data;
 
-    private Directory parent;
+    private String currentPath;
+
+    private Directory parent = null;
 
     public Directory(String name) {
-        this.name = name;
         this.data = new ArrayList<>();
+        this.name = name;
     }
 
     public void accept(Command command) {
         command.execute(this);
     }
 
+    public void deleteNode(String nodeName) {
+        Repository node = this.getNode(nodeName);
+        this.data.remove(node);
+    }
+
+    public void setCurrentPath(String path) {
+        this.currentPath = path;
+    }
+
+    public String getCurrentPath() {
+        return this.currentPath;
+    }
+
+    public boolean isEmpty() {
+        if(data.size() == 0)
+            return true;
+        return false;
+    }
+
     public void addDirectory(String directoryName) {
-        data.add(new Directory(directoryName)); // legare de parent
+        Directory newDirectory = new Directory(directoryName);
+
+        newDirectory.parent = this;
+        newDirectory.currentPath = this.currentPath + "/" + directoryName;
+        newDirectory.permissions = new Permissions(true, true, UserManager.getCurrentUserName());
+
+        data.add(newDirectory);
+    }
+
+    public void addDirectory(String directoryName, String permissions) {
+        Directory newDirectory = new Directory(directoryName);
+
+        newDirectory.parent = this;
+        newDirectory.currentPath = this.currentPath + "/" + directoryName;
+        newDirectory.permissions = new Permissions( permissions.contains("r"),
+                                                    permissions.contains("w"),
+                                                    UserManager.getCurrentUserName());
+        data.add(newDirectory);
     }
 
     public void addFile(String fileName) {
-        data.add(new File(fileName));
+        data.add(new File(fileName, FileSystem.getFileSystem().currentDirectory.permissions));
     }
 
     public Repository getNode(String nodeName) {
 
         for (Repository repository : data) {
-
-            System.out.println(repository.getClass().toString().split(" ")[1]);
 
             if (repository.getClass().toString().split(" ")[1].equals("FileSystem.Directory")) {
                 Directory directory = (Directory) repository;
@@ -53,13 +90,23 @@ public class Directory extends AbstractFileSystem {
         return null;
     }
 
-    public String printContent() {
+    public String getContent() {
         String content = "";
 
         for (int i = 0; i < data.size(); i++) {
             content += data.get(i) + " ";
         }
         return content;
+    }
+
+    public String getDetails() {
+        return  "Directory: " + this.name + " " +
+                this.dimension + " " +
+                this.creationTime + " " + this.permissions;
+    }
+
+    public Directory getParent() {
+        return this.parent;
     }
 
     public String toString() {
