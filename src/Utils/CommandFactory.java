@@ -1,6 +1,6 @@
-import Commands.CommandCd;
-import Commands.CommandLs;
-import Commands.CommandMkdir;
+package Utils;
+
+import Commands.*;
 import Interfaces.Command;
 
 /**
@@ -14,10 +14,16 @@ public class CommandFactory {
             return new CommandLs();
         }
         else if(commandType.equals("cd")) {
-            //return new CommandCd();
+            return new CommandCd();
         }
         else if(commandType.equals("mkdir")) {
             return new CommandMkdir();
+        }
+        else if(commandType.equals("touch")) {
+            return new CommandTouch();
+        }
+        else if(commandType.equals("pwd")) {
+            return new CommandPwd();
         }
 
         return null;
