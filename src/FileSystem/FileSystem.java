@@ -7,12 +7,12 @@ import Interfaces.Repository;
  */
 public class FileSystem {
 
-    public Repository currentDirectory = new Directory("home");
+    public Directory currentDirectory = new Directory("home");
 
     private static FileSystem fileSystem = new FileSystem();
 
     private FileSystem() {
-
+        currentDirectory.setCurrentPath("/home");
     }
 
     public static FileSystem getFileSystem() {
@@ -20,8 +20,10 @@ public class FileSystem {
     }
 
     public Repository getSystemNode(String nodeName) {
-        Directory currentDir = (Directory)currentDirectory;
+        return currentDirectory.getNode(nodeName);
+    }
 
-        return currentDir.getNode(nodeName);
+    public Repository getSystemNode(Directory directory, String nodeName) {
+        return directory.getNode(nodeName);
     }
 }
