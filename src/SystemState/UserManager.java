@@ -1,3 +1,5 @@
+package SystemState;
+
 import java.util.Date;
 
 /**
@@ -20,6 +22,10 @@ public class UserManager {
 
     public static UserManager getCurrentUser() {
         return currentUser;
+    }
+
+    public static String getCurrentUserName() {
+        return currentUser.userName;
     }
 
     public static void createUser(String newName,
