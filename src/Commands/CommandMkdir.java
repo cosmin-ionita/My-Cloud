@@ -1,14 +1,11 @@
 package Commands;
 
-import FileSystem.AbstractFileSystem;
 import FileSystem.Directory;
 import FileSystem.File;
 import FileSystem.FileSystem;
 import Interfaces.Command;
 import Interfaces.Repository;
-import Utils.Parameters;
-
-import java.time.Duration;
+import Utils.ParametersManager;
 
 /**
  * Created by Ionita Cosmin on 12/21/2015.
@@ -17,7 +14,8 @@ public class CommandMkdir implements Command {
 
     public void execute() {
         FileSystem fileSystem = FileSystem.getFileSystem();
-        this.execute(fileSystem.currentDirectory);
+
+        this.execute((Repository)fileSystem.currentDirectory);
     }
 
     public void execute(Repository repository) {
@@ -25,9 +23,12 @@ public class CommandMkdir implements Command {
     }
 
     public void execute(Directory directory) {
-        directory.addDirectory(Parameters.getParameters()[0]);
+        if(ParametersManager.hasPermissions())
+            directory.addDirectory(ParametersManager.getParameters(), ParametersManager.getPermissions());
+        else
+            directory.addDirectory(ParametersManager.getParameters());
 
-        Parameters.setParameters("");
+        ParametersManager.flushParameters();
     }
 
     public void execute(File file) {
