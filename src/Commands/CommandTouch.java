@@ -5,7 +5,7 @@ import FileSystem.File;
 import FileSystem.FileSystem;
 import Interfaces.Command;
 import Interfaces.Repository;
-import Utils.Parameters;
+import Utils.ParametersManager;
 
 /**
  * Created by Ionita Cosmin on 12/23/2015.
@@ -14,7 +14,7 @@ public class CommandTouch implements Command {
 
     public void execute(){
         FileSystem fileSystem = FileSystem.getFileSystem();
-        this.execute(fileSystem.currentDirectory);
+        this.execute((Repository)fileSystem.currentDirectory);
     }
 
     public void execute(Repository repository){
@@ -22,7 +22,9 @@ public class CommandTouch implements Command {
     }
 
     public void execute(Directory directory) {
-        directory.addFile(Parameters.getParameters()[0]);
+        directory.addFile(ParametersManager.getParameters());
+
+        ParametersManager.flushParameters();
     }
 
     public void execute(File file) {
