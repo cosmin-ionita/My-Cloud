@@ -1,48 +1,85 @@
-import FileSystem.FileSystem;
 import Interfaces.Command;
-import Interfaces.Repository;
-import Utils.Parameters;
+import Utils.CommandFactory;
+import Utils.OutputManager;
+import Utils.ParametersManager;
 
 public class Main {
 
     public static void main(String[] args) {
-        String command = "mkdir myFolder";
 
-        // parsing steps
+        /*Command myCommand = CommandFactory.getCommand("mkdir");
 
-        Command myCommand = CommandFactory.getCommand("mkdir");
-
-        FileSystem fileSystem = FileSystem.getFileSystem();
-
-        Parameters.setParameters("myFolder");
+        ParametersManager.setParameters("myFolder");
 
         myCommand.execute();
 
 
+        ParametersManager.setParameters("myFolder2");
+
+        myCommand.execute();
 
 
-        String command3 = "mkdir myFolder2";
+        Command lsCommand = CommandFactory.getCommand("ls");
 
-        // parsing steps
+        lsCommand.execute();
 
-        Command myCommand3 = CommandFactory.getCommand("mkdir");
+        System.out.println(OutputManager.getOutput());
 
-        FileSystem fileSystem2 = FileSystem.getFileSystem();
-
-        Parameters.setParameters("myFolder2");
-
-        myCommand.execute(fileSystem2.currentDirectory);
+        Command touchCommand = CommandFactory.getCommand("touch");
 
 
-        String command2 = "ls";
+        ParametersManager.setParameters("file.txt");
 
-        // parsing steps
+        touchCommand.execute();
 
-        Parameters.setParameters("");
-        Command myCommand2 = CommandFactory.getCommand("ls");
+        lsCommand.execute();
 
-        myCommand2.execute();
+        System.out.println(OutputManager.getOutput());
 
+
+        Command pwdCommand = CommandFactory.getCommand("pwd");
+
+        pwdCommand.execute();
+
+        System.out.println(OutputManager.getOutput());
+
+
+
+        Command cdCommand = CommandFactory.getCommand("cd");
+
+        ParametersManager.setParameters("myFolder");
+
+        cdCommand.execute();
+
+
+        ParametersManager.setParameters("file2.txt");
+
+        touchCommand.execute();
+
+
+        lsCommand.execute();
+
+        System.out.println(OutputManager.getOutput());
+
+        pwdCommand.execute();
+
+        System.out.println(OutputManager.getOutput());
+
+
+
+        ParametersManager.setParameters("../");
+
+        cdCommand.execute();
+
+        lsCommand.execute();
+
+        System.out.println(OutputManager.getOutput());
+        */
+
+
+        String s = "rw";
+
+        System.out.println(!s.equals(""));
 
     }
 }
