@@ -16,4 +16,8 @@ public class Permissions {
 
         this.userName = userName;
     }
+
+    public String toString() {
+        return "-" + ((read) ? "r" : "") + ((write) ? "w" : "") + "-";
+    }
 }
