@@ -25,6 +25,21 @@ public class CommandFactory {
         else if(commandType.equals("pwd")) {
             return new CommandPwd();
         }
+        else if(commandType.equals("rm")) {
+            return new CommandRm();
+        }
+        else if(commandType.equals("newuser")) {
+            return new CommandNewUser();
+        }
+        else if(commandType.equals("login")) {
+            return new CommandLogin();
+        }
+        else if(commandType.equals("userinfo")) {
+            return new CommandUserInfo();
+        }
+        else if(commandType.equals("logout")) {
+            return new CommandLogout();
+        }
 
         return null;
     }
