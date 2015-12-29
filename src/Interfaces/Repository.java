@@ -5,4 +5,5 @@ package Interfaces;
  */
 public interface Repository {
      void accept(Command command);
+     String getDetails();
 }
