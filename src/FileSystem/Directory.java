@@ -4,7 +4,11 @@ import Interfaces.Command;
 import Interfaces.Repository;
 import SystemState.UserManager;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
 /**
  * Created by Ionita Cosmin on 12/21/2015.
  */
@@ -48,6 +52,7 @@ public class Directory extends AbstractFileSystemNode {
         Directory newDirectory = new Directory(directoryName);
 
         newDirectory.parent = this;
+        newDirectory.creationTime = new Date();
         newDirectory.currentPath = this.currentPath + "/" + directoryName;
         newDirectory.permissions = new Permissions(true, true, UserManager.getCurrentUserName());
 
@@ -58,6 +63,7 @@ public class Directory extends AbstractFileSystemNode {
         Directory newDirectory = new Directory(directoryName);
 
         newDirectory.parent = this;
+        newDirectory.creationTime = new Date();
         newDirectory.currentPath = this.currentPath + "/" + directoryName;
         newDirectory.permissions = new Permissions( permissions.contains("r"),
                                                     permissions.contains("w"),
@@ -100,9 +106,12 @@ public class Directory extends AbstractFileSystemNode {
     }
 
     public String getDetails() {
+
+        DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
         return  "Directory: " + this.name + " " +
                 this.dimension + " " +
-                this.creationTime + " " + this.permissions;
+                format.format(this.creationTime) + " " + this.permissions + "\n";
     }
 
     public Directory getParent() {
