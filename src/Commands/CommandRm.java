@@ -38,9 +38,25 @@ public class CommandRm implements Command {
 
     private void deleteNode() {
         ParametersManager.setParameters((this.isRecursive ? "-r" : "") + parametersAlias);
-        //TODO: aici trebuie vazut daca sterg un director sau un fisier. Daca e director, atunci
-        //TODO: il sterg doar daca e gol, atlfel dau mesaj de eroare.
-        FileSystem.getFileSystem().currentDirectory.deleteNode(removalNode);
+
+        Repository node = FileSystem.getFileSystem().currentDirectory.getNode(removalNode);
+
+        if (node.getClass().toString().split(" ")[1].equals("FileSystem.Directory")) {
+            Directory directory = (Directory) node;
+
+            if(directory.isEmpty()) {
+                FileSystem.getFileSystem().currentDirectory.deleteNode(removalNode);
+            }
+            else if(!directory.isEmpty() && isRecursive == true) {
+                FileSystem.getFileSystem().currentDirectory.deleteNode(removalNode);
+            }
+            else {
+                //TODO throw exception
+            }
+
+        } else if (node.getClass().toString().split(" ")[1].equals("FileSystem.File")) {
+            FileSystem.getFileSystem().currentDirectory.deleteNode(removalNode);
+        }
     }
 
     private void saveState() {
