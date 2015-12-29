@@ -16,7 +16,7 @@ public class ParametersManager {
     }
 
     public static boolean hasPermissions() {
-        if(bruteParameters.split(" ")[1] != null && !bruteParameters.split(" ")[1].equals(""))
+        if(bruteParameters.split(" ").length == 2 && !bruteParameters.split(" ")[1].equals(""))
             return true;
         return false;
     }
@@ -43,11 +43,16 @@ public class ParametersManager {
         return bruteParameters.split(" ")[parameterIndex];
     }
 
+    public static String getBruteParameters() {
+        return bruteParameters;
+    }
+
     public static void flushParameters() {
         isRecursive = false;
         allDetails = false;
 
         bruteParameters = "";
+        parameterIndex = 0;
     }
 
     public static boolean isRecursiveOption() {
@@ -59,7 +64,7 @@ public class ParametersManager {
     }
 
     public static boolean noParameters() {
-        if(bruteParameters.equals("")) {
+        if(bruteParameters.equals("") || bruteParameters.split(" ").length < parameterIndex + 1) {
             return true;
         }
         return false;
