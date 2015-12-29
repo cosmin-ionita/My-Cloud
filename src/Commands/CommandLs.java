@@ -20,13 +20,12 @@ public class CommandLs implements Command {
 
         if (ParametersManager.noParameters()) {
             this.execute((Repository) fileSystem.currentDirectory);
-
         } else {
             Repository systemNode = fileSystem.getSystemNode(ParametersManager.getParameters());
 
             this.execute(systemNode);
 
-            if(ParametersManager.isRecursiveOption())
+            if (ParametersManager.isRecursiveOption())
                 OutputManager.setOutput(recursiveOutput);
 
             ParametersManager.flushParameters();
@@ -46,7 +45,7 @@ public class CommandLs implements Command {
                 OutputManager.setOutput(file.getDetails());
         } else {
             if (ParametersManager.isRecursiveOption())
-                recursiveOutput += file.toString();
+                recursiveOutput += file.toString() + " ";
             else
                 OutputManager.setOutput(file.toString());
         }
@@ -58,19 +57,43 @@ public class CommandLs implements Command {
 
             if (ParametersManager.allDetailsOption())
                 recursiveOutput += directory.getDetails();
-             else
-                recursiveOutput += directory.toString();
+            else
+                recursiveOutput += directory.toString() + " ";
 
-            FileSystem fileSystem = FileSystem.getFileSystem();
+            if (!directory.isEmpty()) {
 
-            String content = directory.getContent();
+                String[] content = directory.getContent().split(" ");
 
-            for (String element : content.split(" ")) {
-                Repository systemNode = fileSystem.getSystemNode(element);
-                this.execute(systemNode);
+                for(int i = 0; i<content.length; i++) {
+                    System.out.println(content[i]);
+                }
+
+                for (int i = 0; i < content.length; i++) {
+                    Repository systemNode = directory.getNode(content[i]);
+                        this.execute(systemNode);
+                }
+            }
+        } else {
+            if (ParametersManager.allDetailsOption()) {
+
+                String output = "";
+
+                FileSystem fileSystem = FileSystem.getFileSystem();
+
+                String content = directory.getContent();
+
+                for (String element : content.split(" ")) {
+                    Repository systemNode = fileSystem.getSystemNode(element);
+                    output += systemNode.getDetails();
+                }
+
+                OutputManager.setOutput(output);
+                ParametersManager.flushParameters();
+
+            } else {
+                OutputManager.setOutput(directory.getContent());
+                ParametersManager.flushParameters();
             }
         }
-        else
-            OutputManager.setOutput(directory.getContent());
     }
 }
