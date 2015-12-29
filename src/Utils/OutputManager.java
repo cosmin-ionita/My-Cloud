@@ -11,7 +11,17 @@ public class OutputManager {
         commandOutput = output;
     }
 
+    public static boolean isOutput() {
+        if(commandOutput.equals(""))
+            return false;
+        return true;
+    }
+
     public static String getOutput() {
         return commandOutput;
+    }
+
+    public static void flushOutput() {
+        commandOutput = "";
     }
 }
