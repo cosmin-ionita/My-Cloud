@@ -17,7 +17,7 @@ public class CommandUserInfo implements Command {
         if (ParametersManager.noParameters()) {
             OutputManager.setOutput(UserManager.getCurrentUserInfo());
         } else {
-            OutputManager.setOutput(UserManager.getUserInfo(ParametersManager.getBruteParameters()));
+            OutputManager.setOutput(UserManager.getUserInfo(ParametersManager.getParameters()));
         }
     }
 

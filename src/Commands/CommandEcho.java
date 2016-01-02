@@ -13,7 +13,7 @@ import Utils.ParametersManager;
 public class CommandEcho implements Command {
 
     public void execute() {
-        OutputManager.setOutput(ParametersManager.getBruteParameters());
+        OutputManager.setOutput(ParametersManager.getParameters());
     }
 
     public void execute(Directory directory) {

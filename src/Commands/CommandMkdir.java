@@ -5,6 +5,7 @@ import FileSystem.File;
 import FileSystem.FileSystem;
 import Interfaces.Command;
 import Interfaces.Repository;
+import Utils.OutputManager;
 import Utils.ParametersManager;
 
 /**
@@ -15,7 +16,11 @@ public class CommandMkdir implements Command {
     public void execute() {
         FileSystem fileSystem = FileSystem.getFileSystem();
 
-        this.execute((Repository)fileSystem.currentDirectory);
+        if(fileSystem.currentDirectory.canWrite()){
+            this.execute((Repository)fileSystem.currentDirectory);
+        } else {
+            OutputManager.setOutput("You do not have permissions to modify this directory");
+        }
     }
 
     public void execute(Repository repository) {
