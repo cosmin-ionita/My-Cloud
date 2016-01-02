@@ -8,28 +8,62 @@ import Interfaces.Repository;
 import Utils.OutputManager;
 import Utils.ParametersManager;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by Ionita Cosmin on 12/21/2015.
  */
 public class CommandLs implements Command {
 
     private String recursiveOutput = "";
+    private String regexOutput = "";
+    private boolean regexMode = false;
 
     public void execute() {
         FileSystem fileSystem = FileSystem.getFileSystem();
 
         if (ParametersManager.noParameters()) {
-            this.execute((Repository) fileSystem.currentDirectory);
+            this.execute(fileSystem.currentDirectory);
         } else {
-            Repository systemNode = fileSystem.getSystemNode(ParametersManager.getParameters());
+            if (!isRegex(ParametersManager.getParameters())) {
+                Repository systemNode = fileSystem.getSystemNode(ParametersManager.getParameters());
 
-            this.execute(systemNode);
+                this.execute(systemNode);
 
-            if (ParametersManager.isRecursiveOption())
-                OutputManager.setOutput(recursiveOutput);
+                if (ParametersManager.isRecursiveOption())
+                    OutputManager.setOutput(recursiveOutput);
 
-            ParametersManager.flushParameters();
+                ParametersManager.flushParameters();
+            } else {
+                handleRegexMode(fileSystem);
+            }
         }
+    }
+
+    private void handleRegexMode(FileSystem fileSystem) {
+        Pattern regex = Pattern.compile(ParametersManager.getParameters());
+        String content = fileSystem.currentDirectory.getContent();
+
+        regexMode = true;
+
+        for (String node : content.split(" ")) {
+            if (regex.matcher(node).matches()) {
+                Repository systemNode = fileSystem.getSystemNode(node);
+
+                this.execute(systemNode);
+
+                OutputManager.setOutput(regexOutput);
+            }
+        }
+    }
+
+    private boolean isRegex(String removalNode) {
+        for (int i = 0; i < removalNode.length(); i++) {
+            if (!Character.isLetterOrDigit(removalNode.charAt(i))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void execute(Repository repository) {
@@ -37,62 +71,95 @@ public class CommandLs implements Command {
     }
 
     public void execute(File file) {
-        if (ParametersManager.allDetailsOption()) {
+        if (file.canRead()) {
 
-            if (ParametersManager.isRecursiveOption())
-                recursiveOutput += file.getDetails();
-            else
-                OutputManager.setOutput(file.getDetails());
+            if (ParametersManager.allDetailsOption()) {
+
+                if (ParametersManager.isRecursiveOption())
+                    recursiveOutput += file.getDetails();
+                else if (regexMode)
+                    regexOutput += file.getDetails();
+                else
+                    OutputManager.setOutput(file.getDetails());
+            } else {
+                if (ParametersManager.isRecursiveOption())
+                    recursiveOutput += file.toString() + " ";
+                else if (regexMode)
+                    regexOutput += file.toString() + " ";
+                else
+                    OutputManager.setOutput(file.toString());
+            }
         } else {
-            if (ParametersManager.isRecursiveOption())
-                recursiveOutput += file.toString() + " ";
-            else
-                OutputManager.setOutput(file.toString());
+            OutputManager.setOutput("You do not have permissions to read that file.");
         }
     }
 
     public void execute(Directory directory) {
 
-        if (ParametersManager.isRecursiveOption()) {
-
-            if (ParametersManager.allDetailsOption())
-                recursiveOutput += directory.getDetails();
-            else
-                recursiveOutput += directory.toString() + " ";
-
-            if (!directory.isEmpty()) {
-
-                String[] content = directory.getContent().split(" ");
-
-                for(int i = 0; i<content.length; i++) {
-                    System.out.println(content[i]);
-                }
-
-                for (int i = 0; i < content.length; i++) {
-                    Repository systemNode = directory.getNode(content[i]);
-                        this.execute(systemNode);
+        if (directory.canRead()) {
+            if (ParametersManager.isRecursiveOption()) {
+                handleRecursiveOption(directory);
+            } else {
+                if (ParametersManager.allDetailsOption()) {
+                    handleAllDetailsOption(directory);
+                } else {
+                    handleNoOption(directory);
                 }
             }
         } else {
-            if (ParametersManager.allDetailsOption()) {
+            OutputManager.setOutput("You do not have permissions to see the contents of that directory.");
+        }
+    }
 
-                String output = "";
+    private void handleNoOption(Directory directory) {
 
-                FileSystem fileSystem = FileSystem.getFileSystem();
+        if (regexMode)
+            regexOutput += directory.getContent();
+        else {
+            OutputManager.setOutput(directory.getContent());
+            ParametersManager.flushParameters();
+        }
+    }
 
-                String content = directory.getContent();
+    private void handleAllDetailsOption(Directory directory) {
+        if(regexMode)
+            regexOutput += directory.getDetails();
 
-                for (String element : content.split(" ")) {
-                    Repository systemNode = fileSystem.getSystemNode(element);
-                    output += systemNode.getDetails();
-                }
+        if (!directory.isEmpty()) {
+            String output = "";
 
+            FileSystem fileSystem = FileSystem.getFileSystem();
+
+            String content = directory.getContent();
+
+            for (String element : content.split(" ")) {
+                Repository systemNode = fileSystem.getSystemNode(directory, element);
+
+                output += systemNode.getDetails();
+            }
+
+            if (regexMode) {
+                regexOutput += output + " ";
+            } else {
                 OutputManager.setOutput(output);
                 ParametersManager.flushParameters();
+            }
+        }
+    }
 
-            } else {
-                OutputManager.setOutput(directory.getContent());
-                ParametersManager.flushParameters();
+    private void handleRecursiveOption(Directory directory) {
+        if (ParametersManager.allDetailsOption())
+            recursiveOutput += directory.getDetails();
+        else
+            recursiveOutput += directory.toString() + " ";
+
+        if (!directory.isEmpty()) {
+
+            String[] content = directory.getContent().split(" ");
+
+            for (int i = 0; i < content.length; i++) {
+                Repository systemNode = directory.getNode(content[i]);
+                this.execute(systemNode);
             }
         }
     }
