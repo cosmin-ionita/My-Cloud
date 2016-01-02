@@ -37,6 +37,10 @@ public class ParametersManager {
         if(bruteParameters.contains("-ar")) {
             isRecursive = true;
         }
+        if(bruteParameters.contains("-POO")) {
+            OutputManager.setPooOutput();
+            parameterIndex++;
+        }
     }
 
     public static String getParameters() {
