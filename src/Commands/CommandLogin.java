@@ -4,6 +4,7 @@ import FileSystem.Directory;
 import FileSystem.File;
 import Interfaces.Command;
 import Interfaces.Repository;
+import SystemState.Logger;
 import SystemState.UserManager;
 import Utils.ParametersManager;
 
@@ -49,6 +50,8 @@ public class CommandLogin implements Command {
 
                         UserManager.changeCurrentUser(name, surname, userName, userCreationDate, userLastLoginDate);
 
+                        Logger.log("\r\nLogin_User: " + userName + " at " + new Date());
+
                         loggedUser = true;
                     }
                     catch(ParseException e) {
@@ -61,7 +64,7 @@ public class CommandLogin implements Command {
 
             stream.close();
 
-            if(loggedUser == true) {
+            if(loggedUser) {
                 updateUserLastLoginDate();
             }
 
