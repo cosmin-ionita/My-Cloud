@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Created by Ionita Cosmin on 12/23/2015.
  */
-public abstract class AbstractFileSystemNode implements Repository {
+public abstract class FileSystemNode implements Repository {
     protected String name;
     protected Permissions permissions;
     protected Date creationTime;
