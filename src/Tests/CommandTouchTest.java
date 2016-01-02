@@ -20,6 +20,23 @@ public class CommandTouchTest {
 
     @Before
     public void setUp() throws Exception {
+        // Login
+        Command newuserCommand = CommandFactory.getCommand("newuser");
+
+        ParametersManager.setParameters("root rootpass rootName rootName");
+
+        newuserCommand.execute();
+
+        ParametersManager.flushParameters();
+
+        Command loginCommand = CommandFactory.getCommand("login");
+
+        ParametersManager.setParameters("root rootpass");
+
+        loginCommand.execute();
+
+        ParametersManager.flushParameters();
+
         ParametersManager.setParameters("file.txt");
         tempParameters = "file.txt";
     }
