@@ -1,5 +1,6 @@
 package Interfaces;
 
+import Exceptions.MyInvalidPathException;
 import FileSystem.Directory;
 import FileSystem.File;
 
@@ -9,6 +10,6 @@ import FileSystem.File;
 public interface Command {
     void execute();
     void execute(File file);
-    void execute(Directory directory);
+    void execute(Directory directory) throws MyInvalidPathException;
     void execute(Repository repository);
 }
