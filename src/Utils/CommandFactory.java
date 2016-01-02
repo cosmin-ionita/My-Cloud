@@ -40,6 +40,15 @@ public class CommandFactory {
         else if(commandType.equals("logout")) {
             return new CommandLogout();
         }
+        else if(commandType.equals("cat")) {
+            return new CommandCat();
+        }
+        else if(commandType.equals("fill")) {
+            return new CommandFill();
+        }
+        else if(commandType.equals("echo")) {
+            return new CommandEcho();
+        }
 
         return null;
     }
