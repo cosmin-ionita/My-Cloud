@@ -4,6 +4,7 @@ import FileSystem.FileSystem;
 import Interfaces.Command;
 import Interfaces.Repository;
 import Utils.CommandFactory;
+import Utils.OutputManager;
 import Utils.ParametersManager;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,13 +14,12 @@ import static org.junit.Assert.*;
 /**
  * Created by Ionita Cosmin on 12/23/2015.
  */
-public class CommandMkdirTest {
+public class CommandCdTest {
 
-    Command mkdirCommand = CommandFactory.getCommand("mkdir");
-    String tempParameters = "";
+    Command cdCommand = CommandFactory.getCommand("cd");
+    String pwdPath = "";
 
     private void login() {
-        // Login
         Command newuserCommand = CommandFactory.getCommand("newuser");
 
         ParametersManager.setParameters("root rootpass root root");
@@ -41,16 +41,17 @@ public class CommandMkdirTest {
     public void setUp() throws Exception {
         login();
 
-        ParametersManager.setParameters("myFolder");
-        tempParameters = "myFolder";
+        Command pwdCommand = CommandFactory.getCommand("pwd");
+
+        pwdCommand.execute();
+
+        pwdPath = OutputManager.getOutput();
     }
 
     @Test
     public void testExecute() throws Exception {
-        mkdirCommand.execute();
+        cdCommand.execute();
 
-        Repository rep = FileSystem.getFileSystem().currentDirectory.getNode(tempParameters);
-
-        assertNotNull(rep);
+        assertEquals(pwdPath, FileSystem.getFileSystem().currentDirectory.getCurrentPath());
     }
 }
