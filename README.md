@@ -10,3 +10,6 @@ Also, there is implemented an user-management system that keeps tracking of logi
 created by them.
 
 The application was created in Java SE 8, and the IDE used was IntelliJ IDEA 15.0.1.
+
+
+[https://github.com/ionitacosmin95/My-Cloud/blob/master/pictures/1.png]
