@@ -2,10 +2,8 @@ package Tests;
 
 import FileSystem.FileSystem;
 import Interfaces.Command;
-import Interfaces.Repository;
 import Utils.CommandFactory;
 import Utils.OutputManager;
-import Utils.ParametersManager;
 import org.junit.Before;
 import org.junit.Test;
 
