@@ -86,18 +86,6 @@
   <property name="project.jdk.home" value="${jdk.home.1.7}"/>
   <property name="project.jdk.bin" value="${jdk.bin.1.7}"/>
   <property name="project.jdk.classpath" value="jdk.classpath.1.7"/>
-  <!-- Register Custom Compiler Taskdefs -->
-  <property name="javac2.home" value="${idea.home}/lib"/>
-  <path id="javac2.classpath">
-    <pathelement location="${javac2.home}/javac2.jar"/>
-    <pathelement location="${javac2.home}/jdom.jar"/>
-    <pathelement location="${javac2.home}/asm-all.jar"/>
-    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
-  </path>
-  <target name="register.custom.compilers">
-    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
-    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
-  </target>
   
   <!-- Modules -->
   
@@ -164,15 +152,15 @@
   
   <target name="compile.module.my-cloud" depends="compile.module.my-cloud.production,compile.module.my-cloud.tests" description="Compile module My-Cloud"/>
   
-  <target name="compile.module.my-cloud.production" depends="register.custom.compilers" description="Compile module My-Cloud; production classes">
+  <target name="compile.module.my-cloud.production" description="Compile module My-Cloud; production classes">
     <mkdir dir="${my-cloud.output.dir}"/>
-    <javac2 destdir="${my-cloud.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.my-cloud}/javac">
+    <javac destdir="${my-cloud.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.my-cloud}/javac">
       <compilerarg line="${compiler.args.my-cloud}"/>
       <bootclasspath refid="my-cloud.module.bootclasspath"/>
       <classpath refid="my-cloud.module.production.classpath"/>
       <src refid="my-cloud.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.my-cloud"/>
-    </javac2>
+    </javac>
     
     <copy todir="${my-cloud.output.dir}">
       <fileset dir="${module.my-cloud.basedir}/src">
@@ -182,7 +170,7 @@
     </copy>
   </target>
   
-  <target name="compile.module.my-cloud.tests" depends="register.custom.compilers,compile.module.my-cloud.production" description="compile module My-Cloud; test classes" unless="skip.tests"/>
+  <target name="compile.module.my-cloud.tests" depends="compile.module.my-cloud.production" description="compile module My-Cloud; test classes" unless="skip.tests"/>
   
   <target name="clean.module.my-cloud" description="cleanup module">
     <delete dir="${my-cloud.output.dir}"/>
@@ -199,5 +187,6 @@
   
   <target name="all" depends="build.modules" description="build all"/>
 
-  <target name="main" depends="all" description="build all using travis"/>
+  <target name="main" depends="build.modules" description="build all"/>
+
 </project>
