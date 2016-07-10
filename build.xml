@@ -198,4 +198,6 @@
   <target name="build.modules" depends="init, clean, compile.module.my-cloud" description="build all modules"/>
   
   <target name="all" depends="build.modules" description="build all"/>
+
+  <target name="main" depends="all" description="build all using travis"/>
 </project>
